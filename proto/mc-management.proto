@@ -4,95 +4,105 @@ import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
 
 service MCManagement {
-    rpc GetPlayerCount (GetPlayerCountRequest) returns (GetPlayerCountResponse) {}
-    rpc SubscribePlayerCount (SubscribePlayerCountRequest) returns (stream SubscribePlayerCountResponse) {}
-    
-    rpc UpdateWhitelist (UpdateWhitelistRequest) returns (UpdateWhitelistResponse) {}
+  rpc GetPlayerCount(GetPlayerCountRequest) returns (GetPlayerCountResponse) {}
+  rpc SubscribePlayerCount(SubscribePlayerCountRequest)
+      returns (stream SubscribePlayerCountResponse) {}
 
-    rpc SubscribePlayerEvent (SubscribePlayerEventRequest) returns (stream SubscribePlayerEventResponse) {}
+  rpc UpdateWhitelist(UpdateWhitelistRequest)
+      returns (UpdateWhitelistResponse) {}
 
-    rpc GetResourceConsumption (GetResourceConsumptionRequest) returns (GetResourceConsumptionResponse) {}
-    rpc SubscribeResourceConsumptionEvent (SubscribeResourceConsumptionEventRequest) returns (stream SubscribeResourceConsumptionEventReponse) {}
+  rpc SubscribePlayerEvent(SubscribePlayerEventRequest)
+      returns (stream SubscribePlayerEventResponse) {}
 
-    rpc SubscribeHeartbeat (SubscribeHeartbeatRequest) returns (stream SubscribeHeartbeatResponse) {}
+  rpc GetResourceConsumption(GetResourceConsumptionRequest)
+      returns (GetResourceConsumptionResponse) {}
+  rpc SubscribeResourceConsumptionEvent(
+      SubscribeResourceConsumptionEventRequest)
+      returns (stream SubscribeResourceConsumptionEventReponse) {}
 
-    // rpc RunServerCommand (RunServerCommandRequest) returns (RunServerCommandResponse) {}
+  rpc SubscribeHeartbeat(SubscribeHeartbeatRequest)
+      returns (stream SubscribeHeartbeatResponse) {}
+
+  // rpc RunServerCommand (RunServerCommandRequest) returns
+  // (RunServerCommandResponse) {}
 }
 
 message PlayerCount {
-    google.protobuf.Timestamp timestamp = 1;
-    uint32 player_count = 2;
-    repeated string player_names = 3;
+  google.protobuf.Timestamp timestamp = 1;
+  uint32 player_count = 2;
+  repeated string player_names = 3;
 }
 
 message GetPlayerCountRequest {}
-message GetPlayerCountResponse {
-    PlayerCount response = 1;
-}
+message GetPlayerCountResponse { PlayerCount response = 1; }
 
 message SubscribePlayerCountRequest {}
-message SubscribePlayerCountResponse {
-    PlayerCount response = 1;
-}
+message SubscribePlayerCountResponse { PlayerCount response = 1; }
 
 message UpdateWhitelistRequest {
-    enum UpdateWhitelistAction {
-        UNKNOWN = 0;
-        ADD = 1;
-        REMOVE = 2;
-    }
+  enum UpdateWhitelistAction {
+    UNKNOWN = 0;
+    ADD = 1;
+    REMOVE = 2;
+  }
 
-    UpdateWhitelistAction action = 1;
-    string player_name = 2;
+  UpdateWhitelistAction action = 1;
+  string player_name = 2;
 }
 message UpdateWhitelistResponse {
-    google.protobuf.Timestamp timestamp = 1;
-    repeated string whitelist = 2;
+  google.protobuf.Timestamp timestamp = 1;
+  repeated string whitelist = 2;
 }
 
-message PlayerDeathEvent {
-    string player_name = 1;
-}
-
+message PlayerDeathEvent { string player_name = 1; }
 message SubscribePlayerEventRequest {}
 message SubscribePlayerEventResponse {
-    google.protobuf.Timestamp timestamp = 1;
-    oneof event {
-        PlayerDeathEvent death_event = 2;
-        // other events?
-    }
+  google.protobuf.Timestamp timestamp = 1;
+  oneof event {
+    PlayerDeathEvent death_event = 2;
+    // other events?
+  }
 }
 
 message ResourceConsumption {
-    float cpu_usage_avg = 2;
-    float mem_usage_avg = 3;
-    float storage_usage = 4;
-    // TODO: more detailed summary
+  float cpu_usage_avg = 2;
+  float mem_usage_avg = 3;
+  float storage_usage = 4;
+  // TODO: more detailed summary
 }
 
 message GetResourceConsumptionRequest {}
 message GetResourceConsumptionResponse {
-    google.protobuf.Timestamp timestamp = 1;
-    ResourceConsumption response = 2;
+  google.protobuf.Timestamp timestamp = 1;
+  ResourceConsumption response = 2;
 }
 
 message SubscribeResourceConsumptionEventRequest {}
 message SubscribeResourceConsumptionEventReponse {
-    enum ResourceEventType {
-        UNKNOWN = 0;
-        CPU_TRIGGER = 1;
-        MEM_TRIGGER = 2;
-        STORAGE_TRIGGER = 3;
-    }
+  enum ResourceEventType {
+    UNKNOWN = 0;
+    CPU_TRIGGER = 1;
+    MEM_TRIGGER = 2;
+    STORAGE_TRIGGER = 3;
+  }
 
-    google.protobuf.Timestamp timestamp = 1;
-    ResourceEventType event = 2;
-    ResourceConsumption response = 3;
+  google.protobuf.Timestamp timestamp = 1;
+  ResourceEventType event = 2;
+  ResourceConsumption response = 3;
 }
 
 message SubscribeHeartbeatRequest {
-    google.protobuf.Duration heartbeat_duration = 1;
+  google.protobuf.Duration heartbeat_duration_sec_atleast = 1;
 }
 message SubscribeHeartbeatResponse {
-    google.protobuf.Timestamp timestamp = 1;
+  enum SystemStatus {
+    UNKNOWN = 0;
+    BOOTING = 1;
+    RUNNING = 2;
+    SIGNAL_STOP = 3;
+    FATAL_STOP = 4;
+  }
+
+  google.protobuf.Timestamp timestamp = 1;
+  SystemStatus status = 2;
 }
