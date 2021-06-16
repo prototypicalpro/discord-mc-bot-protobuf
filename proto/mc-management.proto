@@ -51,10 +51,14 @@ message UpdateWhitelistRequest {
 }
 message UpdateWhitelistResponse {
   google.protobuf.Timestamp timestamp = 1;
-  repeated string whitelist = 2;
+  string response = 2;
+  repeated string whitelist = 3;
 }
 
-message PlayerDeathEvent { string player_name = 1; }
+message PlayerDeathEvent {
+  string player_name = 1;
+  string msg = 2;
+}
 message SubscribePlayerEventRequest {}
 message SubscribePlayerEventResponse {
   google.protobuf.Timestamp timestamp = 1;
