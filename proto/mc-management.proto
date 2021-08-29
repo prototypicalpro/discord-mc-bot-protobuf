@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option go_package = "github.com/mirrorkeydev/discord-mc-bot/discord-mc-protobuf/proto";
+
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/duration.proto";
 
